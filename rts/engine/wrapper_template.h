@@ -69,7 +69,7 @@ public:
             
         }        
         //wrapper.OnGameInit(&game, more_params);
-        wrapper.OnGameInit(&game, more_params,isPrint); //根据PythonOption初始化AI和玩家并添加到游戏中
+        wrapper.OnGameInit(&game, more_params); //根据PythonOption初始化AI和玩家并添加到游戏中
 
         s.SetGlobalStats(&_gstats);  // 设置游戏状态
         // if(isPrint){

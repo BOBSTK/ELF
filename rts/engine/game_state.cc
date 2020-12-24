@@ -76,16 +76,11 @@ bool RTSState::Prepare(const RTSGameOptions &options, ostream *output,bool isPri
         }
 
         if (options.map_filename.empty()) {
-            //CmdRandomSeed *cmd_Random = new CmdRandomSeed(INVALID, seed);
-            // if(isPrint){
-            //     std::cout<<"SendCmdWithTick(CmdBPtr(new CmdRandomSeed(INVALID, seed))  --seed "<<seed<<std::endl;
-            //     std::cout<<cmd_Random->PrintInfo()<<std::endl;
-            // }
+           
             
             if (output) *output << "Generate from scratch, seed = " << seed << endl << flush;
              _cmd_receiver.SendCmdWithTick(CmdBPtr(new CmdRandomSeed(INVALID, seed)), 0);
-            _cmd_receiver.SendCmdWithTick(CmdBPtr(cmd_Random), 0);
-            //delete cmd_Random;
+           
         } else {
             // _cmd_receiver.SendCmdWithTick(CmdBPtr(new CmdLoadMap(INVALID, options.map_filename)));
         }
