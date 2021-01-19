@@ -177,7 +177,10 @@ public:
         else return info_.size();
     }
 
+    // 从游戏环境中提取信息
     static void Extract(const RTSState &s, PlayerId player_id, bool respect_fow, std::vector<float> *state);
+    
+    // 将游戏信息保存下来
     static void SaveInfo(const RTSState &s, PlayerId player_id, GameState *gs);
 
 private:

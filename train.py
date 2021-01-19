@@ -11,7 +11,9 @@ from datetime import datetime
 import sys
 import os
 
+
 from rlpytorch import *
+
 
 if __name__ == '__main__':
     trainer = Trainer()
@@ -30,7 +32,7 @@ if __name__ == '__main__':
     env, all_args = load_env(os.environ, trainer=trainer, runner=runner)  
     
     '''
-       GC = GCWrapper(GC, co, desc, gpu=args.gpu, use_numpy=False, params=params)
+       GC = GCWrapper(GC, co, desc, gpu=args.gpu, use_numpy=False, params=params) elf/utils_elf.py
           GC      /gameMC/python_wrapper.cc GameContext
           co      /elf/python_options_utils_cpp.h ContextOption
           desc    actor 和 critic 的 Batch定义  
@@ -45,13 +47,6 @@ if __name__ == '__main__':
     trainer.setup(sampler=env["sampler"], mi=env["mi"], rl_method=env["method"])
 
     GC.reg_callback("train", trainer.train)
-    # def train(batch):
-    #   print(batch)
-    #   import pdb
-    #   pdb.set_trace()
-    #   return trainer.train(batch)
-
-    # GC.reg_callback("train", train)
     GC.reg_callback("actor", trainer.actor)
 
     runner.setup(GC, episode_summary=trainer.episode_summary,

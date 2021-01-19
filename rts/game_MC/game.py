@@ -48,8 +48,11 @@ class Loader(CommonLoader):
         reply_keys = ["V", "pi", "a"]
 
         return dict(
+            # batchsize=self.args.batchsize,
+            # input=dict(T=1, keys=set(["s", "last_r", "terminal"])),  # 期待收到 s last_r terminal
+            # reply=dict(T=1, keys=set(reply_keys + self._unit_action_keys())),
             batchsize=self.args.batchsize,
-            input=dict(T=1, keys=set(["s", "last_r", "terminal"])),  # 期待收到 s last_r terminal
+            input=dict(T=1, keys=set(["s", "last_r", "terminal", "base_x", "base_y"])),
             reply=dict(T=1, keys=set(reply_keys + self._unit_action_keys())),
         )
 

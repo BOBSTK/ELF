@@ -65,6 +65,11 @@ struct GameState {
     int n_max_cmd;
     int n_action;
 
+    //===测试 传最近的基地
+    float base_x = -1.0f, base_y = -1.0f;
+ 
+    //=====
+
     // Action as unit command.
     std::vector<CmdInput> unit_cmds;
 
@@ -137,9 +142,17 @@ struct GameState {
         } else return false;
     }
 
+     std::string PrintGameStateInfo() const {
+        std::stringstream ss;
+        ss<<"id: "<<id<<" seq: "<<seq<<" game_counter: "<<game_counter<<endl;
+        //ss<<"s.size(): "<<s.size()<<endl;
+        ss<<"base_x: "<<base_x<<" base_y: "<<base_y<<endl;
+        return ss.str();
+    }
+
     // These fields are used to exchange with Python side using tensor interface.
-    DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s);
-    //DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s,base_x,base_y);
+    //DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s);
+    DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s,base_x,base_y);
     REGISTER_PYBIND_FIELDS(id);
 };
 

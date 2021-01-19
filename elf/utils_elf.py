@@ -135,13 +135,17 @@ class Batch:
         Args:
             src(dict or `Batch`): batch data to be copied
         '''
+        #print("----copy_from----")
         this_src = src if isinstance(src, dict) else src.batch
         key_assigned = { k : False for k in self.batch.keys() }
-
+        
         for k, v in this_src.items():
+            #print("k:  ",k)
+            #print("v:  ",v)
             # Copy it down to cpu.
             if k in self.batch:
                 bk = self.batch[k]
+                
                 key_assigned[k] = True
                 if v is None:
                     continue
@@ -300,13 +304,18 @@ class GCWrapper:
         self.name2idx = name2idx
         self.gid2gpu = gid2gpu
         self.gpu2gid = gpu2gid
+        # import pdb
+        # pdb.set_trace()
         # if not self.isPrint:
-            # print("idx2name",self.idx2name)
-            # print("name2idx",self.name2idx)
-            # print("gid2gpu",self.gid2gpu)
-            # print("gpu2gid",self.gpu2gid)
-            # print("num_collectors: ",co.num_collectors)
-            # self.isPrint = True
+        #     print("idx2name",self.idx2name)
+        #     print("name2idx",self.name2idx)
+        #     print("gid2gpu",self.gid2gpu)
+        #     print("gpu2gid",self.gpu2gid)
+        #     print("num_collectors: ",co.num_collectors)
+        #     print("inputs: ",inputs)
+        #     print("replies: ",replies)
+
+        #     self.isPrint = True
 
 
     def reg_has_callback(self, key):
@@ -339,13 +348,17 @@ class GCWrapper:
         return True
 
     def _call(self, infos):
+        # infos = elf/state_collector.h InfosT<GameState>
+        #print("===self._call===")
         if infos.gid not in self._cb:
             raise ValueError("info.gid[%d] is not in callback functions" % infos.gid)
 
         if self._cb[infos.gid] is None:
             return
-
-        batchsize = len(infos.s)
+        # import pdb
+        # pdb.set_trace()
+        batchsize = len(infos.s)  # infos.s 是 vector<GameState*>
+        #print("batchsize: ",batchsize)
 
         sel = self.inputs[infos.gid].first_k(batchsize)
         if self.inputs_gpu is not None:
@@ -363,11 +376,13 @@ class GCWrapper:
 
         # Get the reply array
         if len(self.replies) > infos.gid and self.replies[infos.gid] is not None:
-            sel_reply = self.replies[infos.gid].first_k(batchsize)
+            sel_reply = self.replies[infos.gid].first_k(batchsize) #  <elf.utils_elf.Batch object>
         else:
             sel_reply = None
+        #print("sel_reply: ",sel_reply)
 
-        reply = self._cb[infos.gid](picked)
+        reply = self._cb[infos.gid](picked)  # 根据输入的信息执行相应的回调函数得到回复
+        #print("reply: ",reply)
         # If reply is meaningful, send them back.
         if isinstance(reply, dict) and sel_reply is not None:
             # Current we only support reply to the most recent history.
@@ -383,11 +398,11 @@ class GCWrapper:
 
     def Run(self):
         '''Wait group of an arbitrary collector key. Samples in a returned batch are always from the same group, but the group key of the batch may be arbitrary.'''
-        # print("before wait")
-        self.infos = self.GC.Wait(0)
-        # print("before calling")
+       # print("self.GC.Run before wait")
+        self.infos = self.GC.Wait(0)   # <minirts.Infos object>
+        
         res = self._call(self.infos)
-        # print("before_step")
+        
         self.GC.Steps(self.infos)
         return res
 
@@ -411,3 +426,9 @@ class GCWrapper:
     def PrintSummary(self):
         '''Print summary'''
         self.GC.PrintSummary()
+
+    def PrintInfos(infos): #elf/comm-template.h GommT
+        '''Print Infos '''
+        
+        return
+

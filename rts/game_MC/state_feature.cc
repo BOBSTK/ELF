@@ -30,10 +30,13 @@ void MCExtractor::SaveInfo(const RTSState &s, PlayerId player_id, GameState *gs)
     gs->last_r = 0.0;
 
     // 测试获取基地位置
+    UnitId baseId = s.env().FindClosestBase(player_id);
+    if(baseId != INVALID){
+        gs->base_x = s.env().GetUnit(baseId)->GetPointF().x;
+        gs->base_y = s.env().GetUnit(baseId)->GetPointF().y;
+    }
     // UnitId baseId = s.env().FindClosestBase(player_id);
     //const Unit* base = s.env().GetUnit(s.env().FindClosestBase(player_id));
-    //gs->base_x = s.env().GetUnit(s.env().FindClosestBase(player_id))->GetPointF().x;
-    //gs->base_y = s.env().GetUnit(s.env().FindClosestBase(player_id))->GetPointF().y;
     // 测试获取基地位置
 
     int winner = s.env().GetWinnerId();
@@ -52,7 +55,7 @@ void MCExtractor::Extract(const RTSState &s, PlayerId player_id, bool respect_fo
     const int sz = kTotalChannel * m.GetXSize() * m.GetYSize();
     state->resize(sz);
     std::fill(state->begin(), state->end(), 0.0);
-
+    
     extract(s, player_id, respect_fow, &(*state)[0]);
     if (attach_complete_info_) {
         extract(s, player_id, false, &(*state)[m.GetXSize() * m.GetYSize() * info_.size()]);

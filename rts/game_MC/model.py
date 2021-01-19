@@ -57,7 +57,7 @@ class Model_ActorCritic(Model):
             xreduced[:, self.num_unit:] /= 20 * 20
             output = self._var(xreduced)
         else:
-            output = self.net(self._var(x["s"]))
+            output = self.net(self._var(x["s"])) # 将batch数据进过minirtsNet卷积展开为一维向量
         
         #decide = self.decision(output)
         #if not self.isPrint:
@@ -67,10 +67,10 @@ class Model_ActorCritic(Model):
             # print("net: ",self)
             #self.isPrint = True
         #return decide
-        return self.decision(output)
+        return self.decision(output) # a pi v
 
     def decision(self, h):
-        h = self._var(h)
+        h = self._var(h) # Convert tensor x to a pytorch Variable
         policy = self.softmax(self.linear_policy(h))
         value = self.linear_value(h)
         return dict(h=h, V=value, pi=policy, action_type=0)

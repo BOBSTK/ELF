@@ -267,6 +267,7 @@ public:
     // Tell the collector that a reply was sent.
     bool Steps(const Infos& infos, int future_time_usec = 0) {
         // For invalid infos, return.
+        //std::cout<<"Self.GC.steps"<<std::endl;
         if (infos.gid < 0) return false;
 
         std::vector<Key> keys = _groups[infos.gid]->GetBatchKeys();

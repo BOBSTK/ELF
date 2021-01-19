@@ -52,25 +52,29 @@ class ActorCritic:
 
         T = batch["s"].size(0)
 
-        state_curr = m(batch.hist(T - 1))
-        self.discounted_reward.setR(state_curr[value_node].squeeze().data, stats)
+        state_curr = m(batch.hist(T - 1)) # T步迭代计算价值
+        self.discounted_reward.setR(state_curr[value_node].squeeze().data, stats) #设置 init_reward
 
         err = None
-
+        # import pdb
+        # pdb.set_trace()
         for t in range(T - 2, -1, -1):
             bht = batch.hist(t)
             state_curr = m.forward(bht)
 
             # go through the sample and get the rewards.
-            V = state_curr[value_node].squeeze()
+            V = state_curr[value_node].squeeze() # 前向传播计算价值
 
             R = self.discounted_reward.feed(
                 dict(r=batch["r"][t], terminal=batch["terminal"][t]),
-                stats=stats)
+                stats=stats)  # 累计奖励(衰减)
 
-            policy_err = self.pg.feed(R-V.data, state_curr, bht, stats, old_pi_s=bht)
+            
+            policy_err = self.pg.feed(R-V.data, state_curr, bht, stats, old_pi_s=bht) # 计算策略函数误差
             err = add_err(err, policy_err)
             err = add_err(err, self.value_matcher.feed({ value_node: V, "target" : R}, stats))
+
+        # pdb.set_trace()
 
         stats["cost"].feed(err.data[0] / (T - 1))
         err.backward()

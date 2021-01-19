@@ -69,7 +69,8 @@ class Evaluator:
         if self.verbose: print("In Evaluator[%s]::actor" % self.name)
 
         # actor model.
-        m = self.mi[self.actor_name]
+        
+        m = self.mi[self.actor_name] # Model_ActorCritic
         m.set_volatile(True)
         state_curr = m.forward(batch.hist(0))
         m.set_volatile(False)
@@ -83,7 +84,8 @@ class Evaluator:
 
         if self.stats is not None:
             self.stats.feed_batch(batch)
-
+        # import pdb
+        # pdb.set_trace()
         if "rv" in self.keys_in_reply:
             reply_msg["rv"] = self.mi["actor"].step
 
@@ -158,6 +160,7 @@ class Trainer:
         Returns:
             reply_msg(dict): ``pi``: policy, ``a``: action, ``V``: value, `rv`: reply version, signatured by step
         '''
+        
         self.counter.inc("actor")
         return self.evaluator.actor(batch)
 
@@ -168,21 +171,25 @@ class Trainer:
         Args:
             batch(dict): batch data
         '''
+        
         mi = self.evaluator.mi
 
         self.counter.inc("train")
         self.timer.Record("batch_train")
 
-        mi.zero_grad()
+        # import pdb
+        # pdb.set_trace()
+
+        mi.zero_grad() # 梯度清零
         self.rl_method.update(mi, batch, self.counter.stats)
-        mi.update_weights()
+        mi.update_weights() # 更新critic 和 actor参数
 
         self.timer.Record("compute_train")
         if self.counter.counts["train"] % self.args.freq_update == 0:
             # Update actor model
-            # print("Update actor model")
+            print("Update actor model")
             # Save the current model.
-            mi.update_model("actor", mi["model"])
+            mi.update_model("actor", mi["model"])  # 更新模型
             self.just_updated = True
 
         self.just_updated = False

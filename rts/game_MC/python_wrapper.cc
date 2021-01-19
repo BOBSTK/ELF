@@ -66,16 +66,19 @@ public:
     CONTEXT_CALLS(GC, _context);
 
     EntryInfo EntryFunc(const std::string &key) {
+        std::cout<<"key: "<<key<<std::endl;
         auto *mm = GameState::get_mm(key);
         if (mm == nullptr) return EntryInfo();
-
+        
+        
         std::string type_name = mm->type();
         const int mapx = _context->options().map_size_x;
         const int mapy = _context->options().map_size_y;
         const int max_unit_cmd = _context->options().max_unit_cmd;
         const int reduced_size = MCExtractor::Size() * 5 * 5;
+        
 
-        if (key == "s") return EntryInfo(key, type_name, { (int)MCExtractor::Size() * _num_frames_in_state,  _context->options().map_size_y, _context->options().map_size_x});
+        if (key == "s") return EntryInfo(key, type_name, { (int)MCExtractor::Size() * _num_frames_in_state,  _context->options().map_size_y, _context->options().map_size_x}); // 64 x 22 x  20 x 20
         else if (key == "last_r" || key == "terminal" || key == "last_terminal" || key == "id" || key == "seq" || key == "game_counter" || key == "player_id") return EntryInfo(key, type_name);
         else if (key == "pi") return EntryInfo(key, type_name, {GameDef::GetNumAction()});
         else if (key == "a" || key == "rv" || key == "V" || key == "action_type") return EntryInfo(key, type_name);
@@ -90,7 +93,6 @@ public:
         else if (key == "reduced_s") return EntryInfo(key, type_name, { reduced_size });
         else if (key == "reduced_next_s") return EntryInfo(key, type_name, { reduced_size });
         else if (key == "base_x" || key == "base_y") return EntryInfo(key, type_name);
-
  
         return EntryInfo();
     }

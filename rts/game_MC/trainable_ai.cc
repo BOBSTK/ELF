@@ -41,8 +41,12 @@ bool TrainedAI::GameEnd() {
 }
 
 void TrainedAI::extract(const State &s, Data *data) {
+    //std::cout<<"TrainedAI AI "<<id()<<" call extract"<<std::endl;
+    
     GameState *game = &data->newest();
-
+    
+    //std::cout<<game->PrintGameStateInfo()<<endl;
+    
     MCExtractor::SaveInfo(s, id(), game);
     game->name = name();
 
@@ -66,6 +70,9 @@ void TrainedAI::extract(const State &s, Data *data) {
             }
         }
     }
+    //std::cout<<" After Process "<<endl;
+    //std::cout<<game->PrintGameStateInfo()<<endl;
+
 }
 
 #define ACTION_GLOBAL 0

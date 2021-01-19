@@ -88,7 +88,7 @@ class PolicyGradient:
         else:
             errs = self._compute_one_policy_entropy_err(pi, a)
 
-        return errs
+        return errs # policy_err  entropy_err
 
     def _reg_backward(self, v, pg_weights):
         ''' Register the backward hook. Clip the gradient if necessary.'''
@@ -111,21 +111,22 @@ class PolicyGradient:
 
         Args:
             Q(tensor): estimated return
-            actions(tensor): action
             pi_s(variable): policy
+            actions(tensor): action
             old_pi_s(tensor, optional): old policy, in order to get importance factor.
 
         If you specify multiple policies, then all the log prob of these policies are added, and their importance factors are multiplied.
         Feed to stats: policy error and nll error
 
         '''
+        # R-V.data, state_curr, bht, stats, old_pi_s=bht
         args = self.args
         batchsize = Q.size(0)
 
         # We need to set it beforehand.
         # Note that the samples we collect might be off-policy, so we need
         # to do importance sampling.
-        pg_weights = Q.clone()
+        pg_weights = Q.clone() 
 
         policy_err = None
         entropy_err = None
@@ -138,7 +139,10 @@ class PolicyGradient:
             if pi_node in old_pi_s:
                 old_pi = old_pi_s[pi_node].squeeze()
 
-                # Cap it.
+                # Cap it. 
+                #这一步是什么意思
+                #首先用 新策略/就策略 限制值上限为10
+                #然后按照 这一步采取的动作采样结果的到一个系数
                 coeff = torch.clamp(pi.data.div(old_pi), max=args.ratio_clamp).gather(1, a.view(-1, 1)).squeeze()
                 pg_weights.mul_(coeff)
                 # There is another term (to compensate clamping), but we omit it for now.
