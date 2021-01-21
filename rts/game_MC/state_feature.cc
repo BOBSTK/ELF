@@ -28,7 +28,12 @@ void MCExtractor::SaveInfo(const RTSState &s, PlayerId player_id, GameState *gs)
     gs->terminal = s.env().GetTermination() ? 1 : 0;
 
     gs->last_r = 0.0;
+    //gs->action_type = 1;
     int winner = s.env().GetWinnerId();
+    
+    // 设置资源
+    gs->res = s.env().GetPlayer(player_id).GetResource();
+
     if (winner != INVALID) {
       if (winner == player_id) gs->last_r = 1.0;
       else gs->last_r = -1.0;

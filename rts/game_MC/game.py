@@ -39,17 +39,22 @@ class Loader(CommonLoader):
         GC.ApplyExtractorUsage(usage)
 
     def _unit_action_keys(self):
+        # import pdb
+        # pdb.set_trace() 
         if self.args.use_unit_action:
             return ["uloc", "tloc", "bt", "ct", "uloc_prob", "tloc_prob", "bt_prob", "ct_prob"]
         else:
-            return []
+            return ["pi","a"]
 
     def _get_actor_spec(self):
-        reply_keys = ["V", "pi", "a"]
+        #reply_keys = ["V", "pi", "a"]
+        reply_keys = ["V","action_type"]  # unit_cmd 的回复
+        # import pdb
+        # pdb.set_trace() 
 
         return dict(
             batchsize=self.args.batchsize,
-            input=dict(T=1, keys=set(["s", "last_r", "terminal"])),
+            input=dict(T=1, keys=set(["s", "last_r", "terminal","res"])),
             reply=dict(T=1, keys=set(reply_keys + self._unit_action_keys())),
         )
 

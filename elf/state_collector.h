@@ -198,9 +198,11 @@ public:
     }
 
     EntryInfo GetEntry(const std::string &key, int hist_len, EntryFunc entry_func) const {
+       //std::cout<<"GetEntry key = "<<key<<std::endl;
         if (key.empty()) return EntryInfo();
 
         EntryInfo entry_info = entry_func(key);
+        
         entry_info.SetBatchSizeAndHistory(_batchsize, hist_len);
         return entry_info;
     }

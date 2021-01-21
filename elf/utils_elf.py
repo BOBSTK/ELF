@@ -39,6 +39,8 @@ class Batch:
 
     @staticmethod
     def _request(GC, group_id, key, T):
+        # import pdb
+        # pdb.set_trace() 
         info = GC.GetTensorSpec(group_id, key, T)
         # print("Key = \"%s\"" % str(key))
         if info.key == '':
@@ -84,6 +86,8 @@ class Batch:
         batch = Batch()
         batch.dims = { }
         batch.GC = GC
+        # import pdb
+        # pdb.set_trace() 
 
         keys = desc["keys"]
         T = desc["T"]
@@ -135,6 +139,8 @@ class Batch:
         Args:
             src(dict or `Batch`): batch data to be copied
         '''
+        # import pdb
+        # pdb.set_trace() 
         this_src = src if isinstance(src, dict) else src.batch
         key_assigned = { k : False for k in self.batch.keys() }
 
@@ -267,6 +273,8 @@ class GCWrapper:
 
             gpu2gid.append(list())
             for i in range(num_recv_thread):
+                # import pdb
+                # pdb.set_trace() 
                 group_id = GC.AddCollectors(batchsize, len(gpu2gid) - 1, timeout_usec, gstat)
 
                 input_batch = Batch.load(GC, "input", input, group_id, use_gpu=use_gpu, use_numpy=use_numpy)
@@ -290,6 +298,8 @@ class GCWrapper:
         for reply in replies:
             if reply is not None:
                 reply.setzero()
+        # import pdb
+        # pdb.set_trace() 
 
         self.GC = GC
         self.inputs = inputs
@@ -332,7 +342,7 @@ class GCWrapper:
             raise ValueError("info.gid[%d] is not in callback functions" % infos.gid)
 
         if self._cb[infos.gid] is None:
-            return;
+            return
 
         batchsize = len(infos.s)
 

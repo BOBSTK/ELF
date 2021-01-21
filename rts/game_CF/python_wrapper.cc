@@ -68,16 +68,22 @@ public:
     }
 
     EntryInfo EntryFunc(const std::string &key) {
+        //std::cout<<"EntryFunc key_name"<<key<<std::endl;
         auto *mm = GameState::get_mm(key);
-        if (mm == nullptr) return EntryInfo();
+        
+        if (mm == nullptr) {std::cout<<"mm = nullptr! key = "<<key<<std::endl;return EntryInfo();}
+
 
         std::string type_name = mm->type();
+        std::cout<<"key = "<<key<<" type: "<<type_name<<std::endl;
+        
 
         if (key == "s") return EntryInfo(key, type_name, {GameDef::GetNumUnitType() + 8, 20, 20});
         else if (key == "last_r" || key == "r0" ||key == "r1" || key == "terminal" || key == "last_terminal" || key == "id" || key == "seq" || key == "game_counter") return EntryInfo(key, type_name);
         else if (key == "pi") return EntryInfo(key, type_name, {GameDef::GetNumAction()});
         else if (key == "a" || key == "rv" || key == "V") return EntryInfo(key, type_name);
         else if (key == "res") return EntryInfo(key, type_name, {2, NUM_RES_SLOT});
+        //else if (key == "action_type") return EntryInfo(key, type_name);
 
         return EntryInfo();
     }

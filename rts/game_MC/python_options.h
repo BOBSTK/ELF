@@ -41,6 +41,8 @@ struct GameState {
 
     float last_r;
 
+    int res = 0; //资源
+
     // Reply
     int32_t rv;
 
@@ -132,7 +134,8 @@ struct GameState {
     }
 
     // These fields are used to exchange with Python side using tensor interface.
-    DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s);
+    // DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s);
+    DECLARE_FIELD(GameState, id, a, V, pi, last_r, s, rv, terminal, seq, game_counter, last_terminal, uloc, tloc, bt, ct, uloc_prob, tloc_prob, bt_prob, ct_prob, reduced_s, reduced_next_s,res,action_type);
     REGISTER_PYBIND_FIELDS(id);
 };
 

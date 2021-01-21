@@ -66,9 +66,12 @@ public:
 
     EntryInfo EntryFunc(const std::string &key) {
         auto *mm = GameState::get_mm(key);
+        // std::cout << "key: "<<key<<std::endl;
         if (mm == nullptr) return EntryInfo();
+       
 
         std::string type_name = mm->type();
+        // std::cout<<" key type = "<< type_name<<std::endl;
         const int mapx = _context->options().map_size_x;
         const int mapy = _context->options().map_size_y;
         const int max_unit_cmd = _context->options().max_unit_cmd;
@@ -88,6 +91,7 @@ public:
         else if (key == "ct_prob") return EntryInfo(key, type_name, { max_unit_cmd, CmdInput::CI_NUM_CMDS });
         else if (key == "reduced_s") return EntryInfo(key, type_name, { reduced_size });
         else if (key == "reduced_next_s") return EntryInfo(key, type_name, { reduced_size });
+        else if (key == "res") return EntryInfo(key, type_name);
 
         return EntryInfo();
     }

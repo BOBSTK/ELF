@@ -67,6 +67,9 @@ class Evaluator:
         '''
         if self.verbose: print("In Evaluator[%s]::actor" % self.name)
 
+        # import pdb
+        # pdb.set_trace()
+
         # actor model.
         m = self.mi[self.actor_name]
         m.set_volatile(True)
@@ -80,12 +83,21 @@ class Evaluator:
 
         if self.stats is not None:
             self.stats.feed_batch(batch)
+        
+        
 
         if "rv" in self.keys_in_reply:
             reply_msg["rv"] = self.mi["actor"].step
 
         if "V" in self.keys_in_reply:
             reply_msg["V"] = state_curr["V"].data
+
+        if "action_type" in state_curr:
+            reply_msg["action_type"] = state_curr["action_type"]
+        
+        
+        # import pdb
+        # pdb.set_trace()
 
         self.actor_count += 1
         return reply_msg
@@ -151,6 +163,8 @@ class Trainer:
             reply_msg(dict): ``pi``: policy, ``a``: action, ``V``: value, `rv`: reply version, signatured by step
         '''
         self.counter.inc("actor")
+        # import pdb
+        # pdb.set_trace()
         return self.evaluator.actor(batch)
 
     def train(self, batch):

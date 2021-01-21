@@ -16,6 +16,8 @@ from rlpytorch import *
 if __name__ == '__main__':
     trainer = Trainer()
     runner = SingleProcessRun()
+    # import pdb
+    # pdb.set_trace()
     env, all_args = load_env(os.environ, trainer=trainer, runner=runner)
 
     GC = env["game"].initialize()

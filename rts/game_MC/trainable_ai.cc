@@ -81,12 +81,16 @@ bool TrainedAI::handle_response(const State &s, const Data &data, RTSMCAction *a
     // Get the current action from the queue.
     const auto &m = env.GetMap();
     const GameState& gs = data.newest();
+    std::cout<<"===GameState Info: ==="<<std::endl;
+    std::cout<<"action type: "<<gs.action_type<<" gs.n_max_cmd: "<<gs.n_max_cmd<<std::endl;
 
     switch(gs.action_type) {
+        
         case ACTION_GLOBAL:
             // action
             //
             {
+              //std::cout<<"  Action Type "<<gs.action_type <<"  " <<gs.n_max_cmd<<std::endl;
               string comment = "V: " + std::to_string(gs.V) + ", Prob: ";
               for (int i = 0; i < (int) gs.pi.size(); ++i) {
                   if (i > 0) comment += ", ";
@@ -105,8 +109,11 @@ bool TrainedAI::handle_response(const State &s, const Data &data, RTSMCAction *a
                 // Use gs.unit_cmds
                 // std::vector<CmdInput> unit_cmds(gs.unit_cmds);
                 // Use data
+                std::cout<<"  Action Type "<<gs.action_type <<"  " <<gs.n_max_cmd<<std::endl;
+                
                 std::vector<CmdInput> unit_cmds;
                 for (int i = 0; i < gs.n_max_cmd; ++i) {
+                    std::cout<<"unit "<<gs.uloc[i]<<" target: "<< gs.tloc[i]<<std::endl;
                     unit_cmds.emplace_back(_XY(gs.uloc[i], m), _XY(gs.tloc[i], m), gs.ct[i], gs.bt[i]);
                 }
                 std::for_each(unit_cmds.begin(), unit_cmds.end(), [&](CmdInput &ci) { ci.ApplyEnv(env); });
