@@ -22,6 +22,12 @@ struct GameState {
     using State = GameState;
     using Data = GameState;
 
+    /**
+     * 测试获取基地位置信息
+     * */
+     //float base_x, base_y;
+
+
     int32_t id;
     int32_t seq;
     int32_t game_counter;
@@ -54,12 +60,17 @@ struct GameState {
     std::vector<int64_t> uloc, tloc;
     std::vector<int64_t> bt, ct;
 
-    // Also we need to save distributions.
+    // Also we need to save distributions.  概率？
     std::vector<float> uloc_prob, tloc_prob;
     std::vector<float> bt_prob, ct_prob;
 
     int n_max_cmd;
     int n_action;
+
+    //===测试 传最近的基地
+    float base_x = -1.0f, base_y = -1.0f;
+ 
+    //=====
 
     // Action as unit command.
     std::vector<CmdInput> unit_cmds;
@@ -131,6 +142,14 @@ struct GameState {
             unit_cmds.emplace_back(uloc_x, uloc_y, tloc_x, tloc_y, ct, build_tp);
             return true;
         } else return false;
+    }
+
+     std::string PrintGameStateInfo() const {
+        std::stringstream ss;
+        ss<<"id: "<<id<<" seq: "<<seq<<" game_counter: "<<game_counter<<endl;
+        //ss<<"s.size(): "<<s.size()<<endl;
+        ss<<"base_x: "<<base_x<<" base_y: "<<base_y<<endl;
+        return ss.str();
     }
 
     // These fields are used to exchange with Python side using tensor interface.

@@ -40,6 +40,7 @@ class Evaluator:
             on_get_args = self._on_get_args,
             child_providers = child_providers
         )
+        self.isPrint = False
 
     def _on_get_args(self, _):
         if self.stats is not None and not self.stats.is_valid():
@@ -71,13 +72,16 @@ class Evaluator:
         # pdb.set_trace()
 
         # actor model.
-        m = self.mi[self.actor_name]
+        
+        m = self.mi[self.actor_name] # Model_ActorCritic
         m.set_volatile(True)
         state_curr = m.forward(batch.hist(0))
         m.set_volatile(False)
 
         if self.sampler is not None:
             reply_msg = self.sampler.sample(state_curr)
+            # if not self.isPrint:
+            #     print("sampler reply: ",reply_msg)
         else:
             reply_msg = dict(pi=state_curr["pi"].data)
 
@@ -100,6 +104,11 @@ class Evaluator:
         # pdb.set_trace()
 
         self.actor_count += 1
+        # if not self.isPrint:
+        #     print("batch: ",batch)
+        #     print("state_curr",state_curr)
+        #     print("reply_msg",reply_msg)
+        #     self.isPrint = True
         return reply_msg
 
     def episode_summary(self, i):
@@ -162,9 +171,10 @@ class Trainer:
         Returns:
             reply_msg(dict): ``pi``: policy, ``a``: action, ``V``: value, `rv`: reply version, signatured by step
         '''
+        
         self.counter.inc("actor")
-        # import pdb
-        # pdb.set_trace()
+        import pdb
+        pdb.set_trace()
         return self.evaluator.actor(batch)
 
     def train(self, batch):
@@ -174,21 +184,25 @@ class Trainer:
         Args:
             batch(dict): batch data
         '''
+        
         mi = self.evaluator.mi
 
         self.counter.inc("train")
         self.timer.Record("batch_train")
 
-        mi.zero_grad()
+        # import pdb
+        # pdb.set_trace()
+
+        mi.zero_grad() # 梯度清零
         self.rl_method.update(mi, batch, self.counter.stats)
-        mi.update_weights()
+        mi.update_weights() # 更新critic 和 actor参数
 
         self.timer.Record("compute_train")
         if self.counter.counts["train"] % self.args.freq_update == 0:
             # Update actor model
-            # print("Update actor model")
+            print("Update actor model")
             # Save the current model.
-            mi.update_model("actor", mi["model"])
+            mi.update_model("actor", mi["model"])  # 更新模型
             self.just_updated = True
 
         self.just_updated = False

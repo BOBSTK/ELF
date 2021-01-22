@@ -1,5 +1,6 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "iostream": "cpp",
         "*.ipp": "cpp",
         "string": "cpp",
@@ -86,4 +87,24 @@
         "valarray": "cpp",
         "variant": "cpp"
     }
+=======
+        "*.ipp": "cpp",
+        "algorithm": "cpp",
+        "bitset": "cpp",
+        "future": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "functional": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp"
+    },
+    "python.pythonPath": "/usr/local/Caskroom/miniconda/base/envs/moRL/bin/python"
+>>>>>>> 2f09f9674bb84c434124a61e9f45347b48980e60
 }

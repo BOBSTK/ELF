@@ -11,7 +11,9 @@ from datetime import datetime
 import sys
 import os
 
+
 from rlpytorch import *
+
 
 if __name__ == '__main__':
     trainer = Trainer()
@@ -30,6 +32,7 @@ if __name__ == '__main__':
 
     GC.reg_callback("train", trainer.train)
     GC.reg_callback("actor", trainer.actor)
+
     runner.setup(GC, episode_summary=trainer.episode_summary,
                 episode_start=trainer.episode_start)
 

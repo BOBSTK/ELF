@@ -28,7 +28,7 @@ class DiscountedReward:
 
     def feed(self, batch, stats):
         '''
-        Update discounted reward and feed to stats.
+        Update discounted reward and feed to stats. 
 
         Keys in a batch:
 
@@ -41,14 +41,15 @@ class DiscountedReward:
         r = batch["r"]
         term = batch["terminal"]
 
-        # Compute the reward.
+        # Compute the reward. 计算奖励(加上衰减率)
         self.R = self.R * self.args.discount + r
 
-        # If we see any terminal signal, break the reward backpropagation chain.
+        # If we see any terminal signal, break the reward backpropagation chain. 如果发现结束信号
         for i, terminal in enumerate(term):
             if terminal:
-                self.R[i] = r[i]
-
+                self.R[i] = r[i] 
+        # import pdb
+        # pdb.set_trace()
         stats["reward"].feed(r.mean())
         stats["acc_reward"].feed(self.R.mean())
 

@@ -65,6 +65,7 @@ class ValueMatcher:
         Returns:
             value_err
         '''
+        # self.value_matcher.feed({ value_node: V, "target" : R}, stats))
         V = batch[self.value_node]
         value_err = self.value_loss(V, Variable(batch["target"]))
         self._reg_backward(V)

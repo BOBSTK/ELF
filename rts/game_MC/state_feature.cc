@@ -28,7 +28,6 @@ void MCExtractor::SaveInfo(const RTSState &s, PlayerId player_id, GameState *gs)
     gs->terminal = s.env().GetTermination() ? 1 : 0;
 
     gs->last_r = 0.0;
-    //gs->action_type = 1;
     int winner = s.env().GetWinnerId();
     
     // 设置资源
@@ -49,7 +48,7 @@ void MCExtractor::Extract(const RTSState &s, PlayerId player_id, bool respect_fo
     const int sz = kTotalChannel * m.GetXSize() * m.GetYSize();
     state->resize(sz);
     std::fill(state->begin(), state->end(), 0.0);
-
+    
     extract(s, player_id, respect_fow, &(*state)[0]);
     if (attach_complete_info_) {
         extract(s, player_id, false, &(*state)[m.GetXSize() * m.GetYSize() * info_.size()]);

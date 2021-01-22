@@ -184,6 +184,7 @@ private:
     void send_batch() {
         _wakeup.reset();
         _signal->push(_gid, _batch_data);
+        //PRINT();
     }
 
     int wait_batch_used() {

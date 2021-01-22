@@ -44,15 +44,20 @@ class SingleProcessRun:
             Print training stats after each episode.
             In the end, print summary for game context and stop it.
         '''
+        print("GC Start")
         self.GC.Start()
         args = self.args
         for k in range(args.num_episode):
+            #print("episode ",k)
             if self.episode_start is not None:
                 self.episode_start(k)
             if args.tqdm: iterator = tqdm.trange(args.num_minibatch, ncols=50)
             else: iterator = range(args.num_minibatch)
+            #print("iterator: ",iterator)
+
 
             for i in iterator:
+                #print("i : ",i)
                 self.GC.Run()
 
             if self.episode_summary is not None:

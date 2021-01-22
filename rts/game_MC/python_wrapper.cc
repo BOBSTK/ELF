@@ -40,6 +40,7 @@ public:
     }
 
     void Start() {
+        std::cout<<"--------------GameContext Start-----------"<<std::endl;
         _context->Start(
             [this](int game_idx, const ContextOptions &context_options, const PythonOptions &options, const elf::Signal &signal, Comm *comm) {
                     auto params = this->GetParams();
@@ -49,35 +50,36 @@ public:
 
     std::map<std::string, int> GetParams() const {
         return std::map<std::string, int>{
-            { "num_action", GameDef::GetNumAction() },
-            { "num_unit_type", GameDef::GetNumUnitType() },
-            { "num_planes_per_time_stamp", MCExtractor::Size() },
-            { "num_planes", MCExtractor::Size() * _num_frames_in_state },
-            { "resource_dim", 2 * NUM_RES_SLOT },
-            { "max_unit_cmd", _context->options().max_unit_cmd },
-            { "map_x", _context->options().map_size_x },
-            { "map_y", _context->options().map_size_y },
-            { "num_cmd_type", CmdInput::CI_NUM_CMDS },
-            { "reduced_dim", MCExtractor::Size() * 5 * 5 }
+            { "num_action", GameDef::GetNumAction() },    
+            { "num_unit_type", GameDef::GetNumUnitType() },   
+            { "num_planes_per_time_stamp", MCExtractor::Size() },  // 22  每一个时间戳中的 planes数？
+            { "num_planes", MCExtractor::Size() * _num_frames_in_state },  //  22 每一个状态包含一帧的数据
+            { "resource_dim", 2 * NUM_RES_SLOT }, // 10
+            { "max_unit_cmd", _context->options().max_unit_cmd }, // 1
+            { "map_x", _context->options().map_size_x }, // 20
+            { "map_y", _context->options().map_size_y }, // 20  
+            { "num_cmd_type", CmdInput::CI_NUM_CMDS },   // 4
+            { "reduced_dim", MCExtractor::Size() * 5 * 5 }// 22*5*5
         };
     }
 
     CONTEXT_CALLS(GC, _context);
 
     EntryInfo EntryFunc(const std::string &key) {
+        //std::cout<<"key: "<<key<<std::endl;
         auto *mm = GameState::get_mm(key);
         // std::cout << "key: "<<key<<std::endl;
         if (mm == nullptr) return EntryInfo();
        
-
         std::string type_name = mm->type();
         // std::cout<<" key type = "<< type_name<<std::endl;
         const int mapx = _context->options().map_size_x;
         const int mapy = _context->options().map_size_y;
         const int max_unit_cmd = _context->options().max_unit_cmd;
         const int reduced_size = MCExtractor::Size() * 5 * 5;
+        
 
-        if (key == "s") return EntryInfo(key, type_name, { (int)MCExtractor::Size() * _num_frames_in_state,  _context->options().map_size_y, _context->options().map_size_x});
+        if (key == "s") return EntryInfo(key, type_name, { (int)MCExtractor::Size() * _num_frames_in_state,  _context->options().map_size_y, _context->options().map_size_x}); // 64 x 22 x  20 x 20
         else if (key == "last_r" || key == "terminal" || key == "last_terminal" || key == "id" || key == "seq" || key == "game_counter" || key == "player_id") return EntryInfo(key, type_name);
         else if (key == "pi") return EntryInfo(key, type_name, {GameDef::GetNumAction()});
         else if (key == "a" || key == "rv" || key == "V" || key == "action_type") return EntryInfo(key, type_name);
