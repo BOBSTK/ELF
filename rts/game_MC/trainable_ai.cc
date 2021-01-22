@@ -88,8 +88,8 @@ bool TrainedAI::handle_response(const State &s, const Data &data, RTSMCAction *a
     // Get the current action from the queue.
     const auto &m = env.GetMap();
     const GameState& gs = data.newest();
-    std::cout<<"===GameState Info: ==="<<std::endl;
-    std::cout<<"action type: "<<gs.action_type<<" gs.n_max_cmd: "<<gs.n_max_cmd<<std::endl;
+    //std::cout<<"===GameState Info: ==="<<std::endl;
+    //std::cout<<"action type: "<<gs.action_type<<" gs.n_max_cmd: "<<gs.n_max_cmd<<std::endl;
 
     switch(gs.action_type) {
         
