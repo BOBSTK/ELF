@@ -52,7 +52,8 @@ void TrainedAI::extract(const State &s, Data *data) {
 
     if (_recent_states.maxlen() == 1) {
         MCExtractor::Extract(s, id(), _respect_fow, &game->s);
-        // std::cout << "(1) size_s = " << game->s.size() << std::endl << std::flush;
+        
+        std::cout << "(1) size_s = " << game->s.size() << std::endl << std::flush;
     } else {
         std::vector<float> &state = _recent_states.GetRoom();
         MCExtractor::Extract(s, id(), _respect_fow, &state);
@@ -114,13 +115,13 @@ bool TrainedAI::handle_response(const State &s, const Data &data, RTSMCAction *a
         case ACTION_UNIT_CMD:
             {
                 // Use gs.unit_cmds
-                // std::vector<CmdInput> unit_cmds(gs.unit_cmds);
+                std::vector<CmdInput> unit_cmds(gs.unit_cmds);
                 // Use data
-                std::cout<<"  Action Type "<<gs.action_type <<"  " <<gs.n_max_cmd<<std::endl;
+                //std::cout<<"  Action Type "<<gs.action_type <<"  " <<gs.n_max_cmd<<std::endl;
                 
-                std::vector<CmdInput> unit_cmds;
+                std::vector<CmdInput> unit_csmds;
                 for (int i = 0; i < gs.n_max_cmd; ++i) {
-                    std::cout<<"unit "<<gs.uloc[i]<<" target: "<< gs.tloc[i]<<std::endl;
+                    //std::cout<<"cmd type: "<<gs.ct[i]<<std::endl;
                     unit_cmds.emplace_back(_XY(gs.uloc[i], m), _XY(gs.tloc[i], m), gs.ct[i], gs.bt[i]);
                 }
                 std::for_each(unit_cmds.begin(), unit_cmds.end(), [&](CmdInput &ci) { ci.ApplyEnv(env); });

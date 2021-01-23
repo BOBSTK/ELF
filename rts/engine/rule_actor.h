@@ -163,7 +163,7 @@ public:
 
     bool ActByCmd(const GameEnv &env, const vector<CmdInput>& cmd_inputs, string * /*state_string*/, AssignedCmds *assigned_cmds) {
         for (const CmdInput &cmd : cmd_inputs) {
-            // std::cout << cmd.info() << std::endl;
+            //std::cout << cmd.info() << std::endl;
             CmdBPtr c = cmd.GetCmd();
             if (c.get() != nullptr) {
                 const Unit *u = env.GetUnit(cmd.id);

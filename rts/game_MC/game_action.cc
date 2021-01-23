@@ -19,6 +19,7 @@ bool RTSMCAction::Send(const GameEnv &env, CmdReceiver &receiver) {
     std::string comment;
 
     if (_type == CMD_INPUT) {
+        //std::cout<<"ActByCmd "<<std::endl;
         rule_actor.ActByCmd(env, _unit_cmds, &comment, &_cmds);
     } else {
         bool gather_ok = rule_actor.GatherInfo(env, &comment, &_cmds);

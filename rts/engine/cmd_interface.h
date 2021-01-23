@@ -58,8 +58,31 @@ struct CmdInput {
 
     void ApplyEnv(const GameEnv &env) {
         // Check unit id.
-        id = env.GetMap().GetClosestUnitId(unit_loc, 1.0);
+        id = env.GetMap().GetClosestUnitId(unit_loc, 1.0);  
         target = env.GetMap().GetClosestUnitId(p, 1.0);
+        
+        // ====== print cmd=====
+       // std::cout<<"=====Cmd Input====== id :"<<id<<"  target: "<<target<<std::endl;
+        
+    //     if(id != INVALID){
+    //         const Unit* unit = env.GetUnit(id);
+    //         std::cout<<"Unit: "<< unit->GetId()<<" Unit type: "<<unit->GetUnitType()<<" PlayerID: "<<unit->GetPlayerId()<<std::endl; 
+       
+    //         if(target != INVALID){
+    //          const Unit* u_t = env.GetUnit(target);
+    //          std::cout<<"Target: "<< u_t->GetId()<<" Unit type: "<<u_t->GetUnitType()<<" PlayerID: "<<u_t->GetPlayerId()<<std::endl; 
+    //         }
+    //    }
+        //else{
+        //     std::cout<<"Unit not Found! select Point: "<<unit_loc<<" Units: "<<std::endl;
+        // }
+        
+        // else{
+        //     std::cout<<"Target not Found! select Point: "<<p<<std::endl;
+        // }
+
+
+        // ===================
         base = INVALID;
         if (type == CI_GATHER && id != INVALID) base = env.FindClosestBase(Player::ExtractPlayerId(id));
         ready = true;

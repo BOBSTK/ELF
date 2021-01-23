@@ -109,7 +109,7 @@ protected:
 class MCExtractorInfo {
 public:
     enum FeatureType {
-        AFFILIATION = 0,
+        AFFILIATION = 0,   // 友： 1 敌： 2
         HP_RATIO,
         BASE_HP_RATIO,
         HISTORY_DECAY,
@@ -131,7 +131,7 @@ public:
         std::initializer_list<int> ticks = { 200, 500, 1000, 2000, 5000, 10000 };
 
         if (opt.use_time_decay) {
-            total_dim_ += _add_extractor("HistBin", new ExtractorSeq(total_dim_, ticks));   // 6+1
+            //total_dim_ += _add_extractor("HistBin", new ExtractorSeq(total_dim_, ticks));   // 6+1
         }
 
         if (opt.save_prev_seen_units) {
@@ -139,7 +139,7 @@ public:
             total_dim_ += _add_extractor("HistBinPrevSeen", new ExtractorSeq(total_dim_, ticks));
         }
 
-        total_dim_ += _add_extractor("Resource", new ExtractorSpan(total_dim_, NUM_RES_SLOT, 50));  // 5
+        //total_dim_ += _add_extractor("Resource", new ExtractorSpan(total_dim_, NUM_RES_SLOT, 50));  // 5
     }
 
     int size() const { return total_dim_; }
